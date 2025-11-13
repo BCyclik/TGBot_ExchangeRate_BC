@@ -41,7 +41,8 @@ public static class Program
 
         Console.WriteLine("Timer started!");
 
-        Console.ReadLine();
+        await Task.Delay(-1);
+        //Console.ReadLine();
 
         timer.Stop();
 
