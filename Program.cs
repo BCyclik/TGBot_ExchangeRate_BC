@@ -10,7 +10,8 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Args;
-
+using Telegram.Bot.Extensions;
+using Telegram.Bot.Polling;
 namespace TGBOT_ExchangeRate_BC;
 
 public static class Program
@@ -25,8 +26,11 @@ public static class Program
 
         LastPriceBTC = await GetPriceBTC();
         //var cts = new CancellationToken();
-        BotTG.OnMessage += HandleUpdateAsync;
-        BotTG.StartReceiving();
+
+        //var reciveOptions = new ReceiverOptions { AllowedUpdates = { } };
+        // BotTG.OnMessage += HandleUpdateAsync;
+        BotTG.StartReceiving(HandleUpdateAsync, HandleErrorAsync);
+
 
         Console.WriteLine("TGBOT started!");
 
@@ -39,18 +43,19 @@ public static class Program
 
         Console.ReadLine();
 
-        BotTG.StopReceiving();
         timer.Stop();
 
         Console.WriteLine("Program stoped!");
     }
-    private static async void HandleUpdateAsync(object sender, MessageEventArgs e)
+    private static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, System.Threading.CancellationToken cancellationToken)
     {
-        var message = e.Message;
+        if (update.Type != UpdateType.Message) return;
+
+        var message = update.Message;
         if (string.IsNullOrEmpty(message.Text)) return;
         if (!message.Text.Contains("/start")) return;
         SubscribeToExchangeRateBTC(message.From.Id);
-        await BotTG.SendTextMessageAsync(message.From.Id, "Цена сейчас: " + LastPriceBTC);
+        await BotTG.SendMessage(message.From.Id, "Цена сейчас: " + LastPriceBTC);
     }
     private static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, System.Threading.CancellationToken cancellationToken)
     {
@@ -89,7 +94,7 @@ public static class Program
 
         foreach (var userId in subscribesUsers)
         {
-            await BotTG.SendTextMessageAsync(userId, message);
+            await BotTG.SendMessage(userId, message);
         }
     }
 
