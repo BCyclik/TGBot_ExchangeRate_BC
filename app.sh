@@ -1,29 +1,43 @@
 #!/bin/bash
 
-# Параметры
-REPO_URL="https://github.com/BCyclik/TGBot_ExchangeRate_BC"
-APP_NAME="MyApp"  # Название вашего проекта или имя каталога, который содержит .NET проект
+# Указываем URL репозитория (замените на нужный вам репозиторий)
+REPO_URL="https://github.com/BCyclik/TGBot_ExchangeRate_BC.git"
+PROJECT_DIR="TGBot_ExchangeRate_BC" # Имя директории для клонированного проекта
 
-# Функция для вывода сообщения и выхода
-function exit_with_error {
-    echo "$1"
+# Проверяем, установлен ли Git
+if ! command -v git &> /dev/null
+then
+    echo "Git не установлен. Установите Git и попробуйте снова."
     exit 1
-}
+fi
 
-# Клонирование репозитория
-echo "Клонирование репозитория из $REPO_URL..."
-git clone $REPO_URL || exit_with_error "Ошибка при клонировании репозитория."
+# Проверяем, установлен ли .NET SDK
+if ! command -v dotnet &> /dev/null
+then
+    echo ".NET SDK не установлен. Установите .NET SDK и попробуйте снова."
+    exit 1
+fi
 
-# Переход в директорию приложения
-cd $APP_NAME || exit_with_error "Директория $APP_NAME не найдена."
+# Клонируем репозиторий
+if [ -d "$PROJECT_DIR" ]; then
+    echo "Директория '$PROJECT_DIR' уже существует. Обновляем репозиторий."
+    cd "$PROJECT_DIR"
+    git pull origin main # Поменяйте 'main', если у вас другая ветка
+else
+    echo "Клонирование репозитория..."
+    git clone "$REPO_URL" "$PROJECT_DIR"
+    cd "$PROJECT_DIR"
+fi
 
-# Восстановление зависимостей
-echo "Восстановление зависимостей..."
-dotnet restore || exit_with_error "Ошибка при восстановлении зависимостей."
+# Устанавливаем зависимости
+echo "Установка зависимостей..."
+dotnet add package Telegram.Bot
+dotnet add package Newtonsoft.Json
 
-# Запуск приложения в фоновом режиме
-echo "Запуск приложения..."
-dotnet run &  # Запуск в фоновом режиме
+# Сборка проекта
+echo "Сборка проекта..."
+dotnet build
 
-# Вывод сообщения о завершении
-echo "Приложение запущено в фоновом режиме."
+# Запуск проекта
+echo "Запуск проекта..."
+dotnet run
