@@ -20,7 +20,7 @@ public static class Program
     private static TelegramBotClient BotTG = new(BotToken);
     private static decimal LastPriceBTC;
     private static System.Timers.Timer timer = new(30 * 60 * 1000);
-    public static async void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Console.WriteLine("Program starting...");
 
