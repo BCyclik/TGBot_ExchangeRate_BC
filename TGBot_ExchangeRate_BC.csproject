@@ -3,9 +3,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <ApplicationsIcon>app.ico</ApplicationsIcon> <!-- Если у вас есть иконка приложения -->
-    <RootNamespace>MyConsoleApp</RootNamespace> 
-    <AssemblyName>MyConsoleApp</AssemblyName> <!-- Укажите имя вашего приложения -->
     <Nullable>enable</Nullable> <!-- Включение поддержки nullable -->
     <ImplicitUsings>enable</ImplicitUsings> <!-- Включение неявных using директив -->
   </PropertyGroup>
