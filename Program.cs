@@ -78,15 +78,15 @@ public static class Program
 
         if (changePercentage > 0)
         {
-            message = $"Цена Bitcoin увеличилась на {changePercentage:F2}%! Текущая цена: ${currentPrice} (было: ${lastPrice})";
+            message = $"Цена Bitcoin увеличилась на {changePercentage:F2}%! Текущая цена: {currentPrice} (было: {lastPrice})";
         }
         else if (changePercentage < 0)
         {
-            message = $"Цена Bitcoin уменьшилась на {Math.Abs(changePercentage):F2}%! Текущая цена: ${currentPrice} (было: ${lastPrice})";
+            message = $"Цена Bitcoin уменьшилась на {Math.Abs(changePercentage):F2}%! Текущая цена: {currentPrice} (было: {lastPrice})";
         }
         else
         {
-            message = $"Цена Bitcoin осталась неизменной: ${currentPrice}.";
+            message = $"Цена Bitcoin осталась неизменной: {currentPrice}.";
         }
 
         LastPriceBTC = currentPrice;
@@ -114,10 +114,10 @@ public static class Program
         {
             using (HttpClient client = new HttpClient())
             {
-                string url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd";
+                string url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=rub";
                 var response = await client.GetStringAsync(url);
                 var json = JObject.Parse(response);
-                return json["bitcoin"]["usd"].Value<decimal>();
+                return json["bitcoin"]["rub"].Value<decimal>();
             }
         }
         catch (Exception ex)
