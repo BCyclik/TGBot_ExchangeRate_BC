@@ -39,3 +39,45 @@ sudo systemctl start "$SERVICE_NAME"
 sudo systemctl enable "$SERVICE_NAME"  # Включение автозапуска при загрузке
 
 echo "Сервис $SERVICE_NAME успешно создан и запущен."
+
+# Создание CLI-скрипта для управления сервисом
+echo "Создание CLI-скрипта для управления сервисом..."
+sudo tee /usr/local/bin/tgbot_exchagerate > /dev/null <<EOL
+#!/bin/bash
+
+SERVICE_NAME="$SERVICE_NAME"
+
+case "\$1" in
+    start)
+        echo "Запуск сервиса \$SERVICE_NAME..."
+        sudo systemctl start "\$SERVICE_NAME"
+        echo "\$SERVICE_NAME запущен."
+        ;;
+    
+    stop)
+        echo "Остановка сервиса \$SERVICE_NAME..."
+        sudo systemctl stop "\$SERVICE_NAME"
+        echo "\$SERVICE_NAME остановлен."
+        ;;
+    
+    status)
+        echo "Статус сервиса \$SERVICE_NAME:"
+        sudo systemctl status "\$SERVICE_NAME"
+        ;;
+    
+    restart)
+        echo "Перезапуск сервиса \$SERVICE_NAME..."
+        sudo systemctl restart "\$SERVICE_NAME"
+        echo "\$SERVICE_NAME перезапущен."
+        ;;
+    
+    *)
+        echo "Используйте: \$0 {start|stop|status|restart}"
+        ;;
+esac
+EOL
+
+# Сделать скрипт исполняемым
+sudo chmod +x /usr/local/bin/tgbot_exchagerate
+
+echo "Установка завершена. Вы можете использовать команду 'tgbot_exchagerate' для управления сервисом."
