@@ -39,9 +39,9 @@ echo "Сборка проекта..."
 dotnet build
 
 # Запуск проекта в фоновом режиме
-echo "Запуск проекта в фоновом режиме..."
-nohup dotnet run > output.log 2>&1 &
+#echo "Запуск проекта в фоновом режиме..."
+#nohup dotnet run > output.log 2>&1 &
 
 # Получаем PID
-echo "Приложение запущено с PID: $!"
-echo "Вывод приложения сохраняется в file output.log"
+#echo "Приложение запущено с PID: $!"
+#echo "Вывод приложения сохраняется в file output.log"
